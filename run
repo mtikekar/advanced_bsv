@@ -1,0 +1,2 @@
+pandoc -s -o advanced_bsv.html advanced_bsv.txt
+pandoc -s -o advanced_bsv.pdf advanced_bsv.txt
