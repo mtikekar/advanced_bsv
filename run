@@ -1,2 +1,2 @@
-pandoc -s -o advanced_bsv.html advanced_bsv.txt
-pandoc -s -o advanced_bsv.pdf advanced_bsv.txt
+~/.cabal/bin/pandoc -s -o README.md -t markdown_github advanced_bsv.txt
+~/.cabal/bin/pandoc -o advanced_bsv.pdf advanced_bsv.txt
