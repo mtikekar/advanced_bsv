@@ -4,7 +4,7 @@
 
 # Type inference
 
-BSV is a strongly-typed language in that everything (variables, rules,
+BSV is a strongly typed language in that everything (variables, rules,
 functions, modules, interfaces, action blocks, etc.) has a type and all type
 conversions must be done explicitly. As a result, the compiler can infer the
 types of most things provided we supply a few types at the top level. For example:
@@ -62,7 +62,7 @@ int h = g1(f1, 1, 2); // h is 3 again
 If a function is a variable, what is its type? In this case, `f1` is of type
 "a function that expects two ints and returns an int". In BSV, this is written
 as `function int f(int x1, int x2)`. Knowing this, the function `g1` above can
-be written with all types as follows:
+be defined with explicit types as follows:
 
 ```{.bsv}
 function int g1(function int f1(int a, int b), int x, int y)
@@ -73,7 +73,7 @@ Knowing the types of objects is going to help understand latter parts of this
 text better. Writing the full type every time is cumbersome, so I'll use a
 shorthand notation:
 
-```
+```{.bsv}
 function int f(int x1, int x2) <=> (int, int) -> int
 ```
 
@@ -146,7 +146,7 @@ overloaded functions. For example, I would like a `pop` function on `FIFO`
 interfaces that combines `deq` and `first` into one `ActionValue`. This can be
 written as a function parametrized on `FIFO`'s data type:
 
-```
+```{.bsv}
 function ActionValue#(d) pop(FIFO#(d) f)
   = actionvalue
         f.deq;
@@ -234,7 +234,7 @@ endinstance
 ```
 
 In all the instances, the return types (`int, int -> int, (int, int) -> int`)
-can be left out for the compiler to infer. Further, in the last two instance,
+can be left out for the compiler to infer. Further, in the last two instances,
 `f1` can be defined in a normal form, rather than the curried form. This makes
 the code much more readable:
 
