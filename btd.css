@@ -259,7 +259,7 @@ code /* All inline code spans */
     {
     }
 
-p > code, li > code , td > code /* Code spans in paragraphs and tight lists and tables */
+p > code, li > code, td > code, p > strong > code /* Code spans in paragraphs and tight lists and tables */
     {
     /* Pad a little from adjacent text */
     background-color:white;
