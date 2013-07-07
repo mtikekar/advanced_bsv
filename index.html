@@ -493,7 +493,6 @@
 <div id="header">
 <h1 class="title">Advanced features of Bluespec SystemVerilog (BSV)</h1>
 <h2 class="author">Mehul Tikekar</h2>
-<h3 class="date">July 4, 2013</h3>
 </div>
 <h1 id="type-inference">Type inference</h1>
 <p>BSV is a strongly typed language in that everything (variables, rules, functions, modules, interfaces, action blocks, etc.) has a type and all type conversions must be done explicitly. As a result, the compiler can infer the types of most things provided we supply a few types at the top level. For example:</p>
@@ -503,33 +502,33 @@
 endinterface
 
 <span class="kw">module</span> mkExample(ExampleIfc);
-    <span class="kw">let</span> f1 &lt;- mkFIFO;    // f1 is of <span class="kw">type</span> <span class="dt">FIFO</span>#(...)
-    <span class="kw">let</span> r1 &lt;- mkReg(<span class="bn">0</span>);  // r1 is of <span class="kw">type</span> <span class="dt">Reg</span>#(...)
-    <span class="kw">let</span> r2 &lt;- mkReg(<span class="bn">0</span>);  // r2 is of <span class="kw">type</span> <span class="dt">Reg</span>#(...)
+    <span class="kw">let</span> f1 &lt;- mkFIFO;    // f1 is of type FIFO#(...)
+    <span class="kw">let</span> r1 &lt;- mkReg(<span class="bn">0</span>);  // r1 is of type Reg#(...)
+    <span class="kw">let</span> r2 &lt;- mkReg(<span class="bn">0</span>);  // r2 is of type Reg#(...)
 
     <span class="kw">interface</span> <span class="dt">Put</span> some_subifc = toPut(f1);
-        // f1 is of <span class="kw">type</span> <span class="dt">FIFO</span>#(<span class="dt">UInt</span>#(<span class="bn">4</span>))
+        // f1 is of type FIFO#(UInt#(4))
 
     <span class="kw">method</span> some_method(arg) = <span class="kw">actionvalue</span>
-        r1 &lt;= arg; // r1 is of <span class="kw">type</span> <span class="dt">Reg</span>#(<span class="dt">UInt</span>#(<span class="bn">7</span>))
-        <span class="kw">return</span> r2; // r2 is of <span class="kw">type</span> <span class="dt">Reg</span>#(<span class="dt">UInt</span>#(<span class="bn">8</span>))
+        r1 &lt;= arg; // r1 is of type Reg#(UInt#(7))
+        <span class="kw">return</span> r2; // r2 is of type Reg#(UInt#(8))
     endactionvalue;
 endmodule</code></pre>
 <p>Thus, the <code>let</code> keyword can be used to avoid specifying any types redundantly. Incidentally, <code>let</code> can also unpack tuples: <code>let {a, b} = some_tuple2</code>. <code>let</code> is however forbidden in the top level context - it must be used only inside a module, function, etc.</p>
 <p>Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, <code>function int f1(int x, int y)</code> can be written simply as <code>function f1(x, y)</code>. And what’s more, the function is automatically polymorphic. That is,</p>
 <pre class="bsv"><code><span class="kw">function</span> f(x) = <span class="bn">2</span>*x;
-Integer a = <span class="bn">15</span>;
+<span class="dt">Integer</span> a = <span class="bn">15</span>;
 <span class="dt">UInt</span>#(<span class="bn">4</span>) b = <span class="bn">15</span>;
-$display(f(a), f(b)); // Prints <span class="bn">30</span> <span class="bn">14</span></code></pre>
+$display(f(a), f(b)); // Prints 30 14</code></pre>
 <h1 id="function-magic">Function magic</h1>
 <h2 id="functions-are-first-class-objects">Functions are first-class objects</h2>
 <p>In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. <strong>Basically, functions can be used in any context where a variable can be used.</strong> This lets us do things like:</p>
 <pre class="bsv"><code><span class="kw">function</span> f1(x, y) = x + y;
 <span class="kw">let</span> g = f1;
-<span class="dt">int</span> h = g(<span class="bn">1</span>, <span class="bn">2</span>); // h is <span class="bn">3</span></code></pre>
+<span class="dt">int</span> h = g(<span class="bn">1</span>, <span class="bn">2</span>); // h is 3</code></pre>
 <p>Or this:</p>
 <pre class="bsv"><code><span class="kw">function</span> g1(f, x, y) = f(x, y);
-<span class="dt">int</span> h = g1(f1, <span class="bn">1</span>, <span class="bn">2</span>); // h is <span class="bn">3</span> again</code></pre>
+<span class="dt">int</span> h = g1(f1, <span class="bn">1</span>, <span class="bn">2</span>); // h is 3 again</code></pre>
 <p>If a function is a variable, what is its type? In this case, <code>f1</code> is of type “a function that expects two ints and returns an int”. In BSV, this is written as <code>function int f(int x1, int x2)</code>. Knowing this, the function <code>g1</code> above can be defined with explicit types as follows:</p>
 <pre class="bsv"><code><span class="kw">function</span> <span class="dt">int</span> g1(<span class="kw">function</span> <span class="dt">int</span> f1(<span class="dt">int</span> a, <span class="dt">int</span> b), <span class="dt">int</span> x, <span class="dt">int</span> y)
   = f1(x, y);</code></pre>
@@ -590,9 +589,9 @@ endfunction</code></pre>
 
 <span class="dt">FIFO</span>#(<span class="dt">int</span>) f &lt;- mkFIFO;
 
-rule ...
+<span class="kw">rule</span> ...
    <span class="kw">let</span> val &lt;- pop(f);
-   // instead of <span class="kw">let</span> val = f.first; f.deq;</code></pre>
+   // instead of let val = f.first; f.deq;</code></pre>
 <p>If I want to overload it further so it works with both <code>FIFO</code> and <code>FIFOF</code> interfaces, a typeclass is needed. The idea is to capture the common behavior in the typeclass and define specific instances for different types. This can be done as follows:</p>
 <pre class="bsv"><code><span class="kw">typeclass</span> FIFOPop#(<span class="kw">type</span> ifc_fifo, <span class="kw">type</span> t_fifo);
     <span class="kw">function</span> <span class="dt">ActionValue</span>#(t_fifo) pop(ifc_fifo#(t_fifo) f);
@@ -718,12 +717,12 @@ endinstance</code></pre>
 endtypeclass
 
 <span class="kw">instance</span> AddArb#(<span class="dt">int</span>); 
-    // d = <span class="dt">int</span>
+    // d = int
     <span class="kw">function</span> <span class="dt">int</span> add(<span class="dt">int</span> x1, <span class="dt">int</span> x2) = x1 + x2;
 endinstance
 
 <span class="kw">instance</span> AddArb#(<span class="kw">function</span> d1 f(<span class="dt">int</span> x)) provisos(AddArb#(d1));
-    // d = <span class="dt">int</span> -&gt; d
+    // d = int -&gt; d
     <span class="kw">function</span> <span class="kw">function</span> d1 f(<span class="dt">int</span> x) add(<span class="dt">int</span> x1, <span class="dt">int</span> x2);
         <span class="kw">function</span> f2(x3) = add(x1 + x2, x3);
         <span class="kw">return</span> f2;
@@ -741,7 +740,7 @@ endinstance</code></pre>
 <h3 id="adder-tree">Adder tree</h3>
 <p>This is a more complicated example of a typeclass that implements an adder tree as a pipelined module and as a combinational function. The input is an <code>n</code>-long vector of <code>UInt#(nbits)</code> elements and in each stage of the tree the partial sums increase in bitwidth by 1. The final result is of type <code>UInt#(nbits + log2(n))</code>.</p>
 <pre class="bsv"><code><span class="kw">interface</span> AdderTree#(numeric <span class="kw">type</span> n, numeric <span class="kw">type</span> nbits);
-    // The <span class="kw">interface</span> to the pipelined <span class="kw">module</span>
+    // The interface to the pipelined module
     <span class="kw">method</span> <span class="dt">Action</span> put_vector(Vector#(n, <span class="dt">UInt</span>#(nbits)) vec);
     <span class="kw">method</span> <span class="dt">ActionValue</span>#(<span class="dt">UInt</span>#(TAdd#(TLog#(n), nbits))) get_result;
 endinterface
@@ -754,14 +753,14 @@ endinterface
 endtypeclass
 
 <span class="kw">instance</span> Adder#(<span class="bn">2</span>, nbits);
-    // Base <span class="kw">instance</span> of <span class="bn">2</span>-long vector
-    <span class="kw">module</span> mkAdderTree (AdderTree#(<span class="bn">2</span>, nbits));
+    // Base instance of 2-long vector
+    <span class="kw">module</span> mkAdderTree(AdderTree#(<span class="bn">2</span>, nbits));
         <span class="kw">let</span> f &lt;- mkFIFO;
         <span class="kw">method</span> put_vector(vec) = f.enq(extend(vec[<span class="bn">0</span>]) + extend(vec[<span class="bn">1</span>]));
         <span class="kw">method</span> get_result = pop(f);
     endmodule
 
-    <span class="kw">function</span> treeAdd (vec) = extend(vec[<span class="bn">0</span>]) + extend(vec[<span class="bn">1</span>]);
+    <span class="kw">function</span> treeAdd(vec) = extend(vec[<span class="bn">0</span>]) + extend(vec[<span class="bn">1</span>]);
 endinstance
 
 <span class="kw">instance</span> Adder#(n, nbits)
@@ -770,20 +769,20 @@ endinstance
               Adder#(hn, nbits));
 
     // General case
-    <span class="kw">module</span> mkAdderTree (AdderTree#(n, nbits));
+    <span class="kw">module</span> mkAdderTree(AdderTree#(n, nbits));
         // two subtrees
         AdderTree#(hn, nbits) g1 &lt;- mkAdderTree;
         AdderTree#(hn, nbits) g2 &lt;- mkAdderTree;
         <span class="kw">let</span> f &lt;- mkFIFO;
 
-        rule getResult;
+        <span class="kw">rule</span> getResult;
             <span class="kw">let</span> res1 &lt;- g1.get_result;
             <span class="kw">let</span> res2 &lt;- g2.get_result;
             f.enq(extend(res1) + extend(res2));
         endrule
 
         <span class="kw">method</span> put_vector(vec) = <span class="kw">action</span>
-            /* <span class="dt">Put</span> the first and second half 
+            /* Put the first and second half 
             of the vector in the subtrees */
             g1.put_vector(take(vec));
             g2.put_vector(takeTail(vec));
@@ -792,7 +791,7 @@ endinstance
         <span class="kw">method</span> get_result = pop(f);
     endmodule
 
-    <span class="kw">function</span> treeAdd (vals) = begin
+    <span class="kw">function</span> treeAdd(vals) = <span class="kw">begin</span>
         Vector#(hn, <span class="dt">UInt</span>#(nbits)) vals1 = take(vals);
         Vector#(hn, <span class="dt">UInt</span>#(nbits)) vals2 = takeTail(vals);
         <span class="kw">let</span> res1 = treeAdd(vals1);
