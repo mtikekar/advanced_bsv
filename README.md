@@ -303,13 +303,13 @@ endtypeclass
 
 instance Adder#(2, nbits);
     // Base instance of 2-long vector
-    module mkAdderTree (AdderTree#(2, nbits));
+    module mkAdderTree(AdderTree#(2, nbits));
         let f <- mkFIFO;
         method put_vector(vec) = f.enq(extend(vec[0]) + extend(vec[1]));
         method get_result = pop(f);
     endmodule
 
-    function treeAdd (vec) = extend(vec[0]) + extend(vec[1]);
+    function treeAdd(vec) = extend(vec[0]) + extend(vec[1]);
 endinstance
 
 instance Adder#(n, nbits)
@@ -318,7 +318,7 @@ instance Adder#(n, nbits)
               Adder#(hn, nbits));
 
     // General case
-    module mkAdderTree (AdderTree#(n, nbits));
+    module mkAdderTree(AdderTree#(n, nbits));
         // two subtrees
         AdderTree#(hn, nbits) g1 <- mkAdderTree;
         AdderTree#(hn, nbits) g2 <- mkAdderTree;
@@ -340,7 +340,7 @@ instance Adder#(n, nbits)
         method get_result = pop(f);
     endmodule
 
-    function treeAdd (vals) = begin
+    function treeAdd(vals) = begin
         Vector#(hn, UInt#(nbits)) vals1 = take(vals);
         Vector#(hn, UInt#(nbits)) vals2 = takeTail(vals);
         let res1 = treeAdd(vals1);
