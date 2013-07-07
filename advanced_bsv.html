@@ -515,7 +515,12 @@ endinterface
         <span class="kw">return</span> r2; // r2 is of <span class="kw">type</span> <span class="dt">Reg</span>#(<span class="dt">UInt</span>#(<span class="bn">8</span>))
     endactionvalue;
 endmodule</code></pre>
-<p>Thus, the <code>let</code> keyword can be used to avoid specifying any types redundantly. Incidentally, <code>let</code> can also unpack tuples: <code>let {a, b} = some_tuple2</code>. <code>let</code> is however forbidden in the top level context - it must be used only inside a module, function, etc. Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, <code>function int f1(int x, int y)</code> can be written simply as <code>function f1(x, y)</code>.</p>
+<p>Thus, the <code>let</code> keyword can be used to avoid specifying any types redundantly. Incidentally, <code>let</code> can also unpack tuples: <code>let {a, b} = some_tuple2</code>. <code>let</code> is however forbidden in the top level context - it must be used only inside a module, function, etc.</p>
+<p>Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, <code>function int f1(int x, int y)</code> can be written simply as <code>function f1(x, y)</code>. And what’s more, the function is automatically polymorphic. That is,</p>
+<pre class="bsv"><code><span class="kw">function</span> f(x) = <span class="bn">2</span>*x;
+Integer a = <span class="bn">15</span>;
+<span class="dt">UInt</span>#(<span class="bn">4</span>) b = <span class="bn">15</span>;
+$display(f(a), f(b)); // Prints <span class="bn">30</span> <span class="bn">14</span></code></pre>
 <h1 id="function-magic">Function magic</h1>
 <h2 id="functions-are-first-class-objects">Functions are first-class objects</h2>
 <p>In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. <strong>Basically, functions can be used in any context where a variable can be used.</strong> This lets us do things like:</p>
@@ -708,7 +713,7 @@ endinstance</code></pre>
 </table>
 <p>and so on. Thus, the type of <code>add(x1, x2)</code> can be recursively defined as <code>d = int</code> and <code>d = int -&gt; d</code>.</p>
 <p>This translates to BSV as:</p>
-<pre class="bsv"><code><span class="kw">typeclass</span> AddArb#(d);
+<pre class="bsv"><code><span class="kw">typeclass</span> AddArb#(<span class="kw">type</span> d);
     <span class="kw">function</span> d add(<span class="dt">int</span> x1, <span class="dt">int</span> x2);
 endtypeclass
 

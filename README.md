@@ -24,7 +24,16 @@ module mkExample(ExampleIfc);
 endmodule
 ~~~~
 
-Thus, the `let` keyword can be used to avoid specifying any types redundantly. Incidentally, `let` can also unpack tuples: `let {a, b} = some_tuple2`. `let` is however forbidden in the top level context - it must be used only inside a module, function, etc. Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, `function int f1(int x, int y)` can be written simply as `function f1(x, y)`.
+Thus, the `let` keyword can be used to avoid specifying any types redundantly. Incidentally, `let` can also unpack tuples: `let {a, b} = some_tuple2`. `let` is however forbidden in the top level context - it must be used only inside a module, function, etc.
+
+Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, `function int f1(int x, int y)` can be written simply as `function f1(x, y)`. And what’s more, the function is automatically polymorphic. That is,
+
+~~~~ {.bsv}
+function f(x) = 2*x;
+Integer a = 15;
+UInt#(4) b = 15;
+$display(f(a), f(b)); // Prints 30 14
+~~~~
 
 Function magic
 ==============
@@ -242,7 +251,7 @@ and so on. Thus, the type of `add(x1, x2)` can be recursively defined as `d = in
 This translates to BSV as:
 
 ~~~~ {.bsv}
-typeclass AddArb#(d);
+typeclass AddArb#(type d);
     function d add(int x1, int x2);
 endtypeclass
 
