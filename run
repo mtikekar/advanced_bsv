@@ -3,6 +3,6 @@ set -x
 pandoc=~/.cabal/bin/pandoc
 $pandoc -s -S -o README.md -t markdown_github advanced_bsv.txt
 $pandoc -S -o advanced_bsv.pdf advanced_bsv.txt
-$pandoc -s -S -o temp.html -H webpage.css -H btd.css advanced_bsv.txt
+$pandoc -s -S -o temp.html -t html5 --toc-depth=1 -c webpage.css -c btd.css advanced_bsv.txt
 python bsv_syntax.py temp.html > advanced_bsv.html
-rm temp.html
+#rm temp.html

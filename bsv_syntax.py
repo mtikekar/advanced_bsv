@@ -14,18 +14,30 @@ def highlight_bsv(code):
     code = bsv_dt.sub(r'<span class="dt">\1</span>', code)
     code = bsv_bn.sub(r'<span class="bn">\1</span>', code)
     return code
-
+dbg = 0
 class MyParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
         self.tag_stack = []
 
     def handle_starttag(self, tag, attrs):
-        self.tag_stack.append((tag, attrs))
+        ts = self.tag_stack
+        if len(ts) > 0:
+            if ts[-1][0] != 'head': ts.append((tag, attrs))
+        else:
+            ts.append((tag, attrs))
+
+        if dbg: print ts
         write(self.get_starttag_text())
 
     def handle_endtag(self, tag):
-        assert(self.tag_stack.pop()[0] == tag)
+        ts = self.tag_stack
+        if len(ts) > 0 and ts[-1][0] != 'head':
+            assert(ts.pop()[0] == tag)
+        elif tag == 'head':
+            ts.pop()
+
+        if dbg: print ts
         write("</" + tag + ">")
 
     def handle_startendtag(self, tag, attrs):
@@ -45,6 +57,12 @@ class MyParser(HTMLParser):
 
     def handle_decl(self, name):
         write("<!" + name + ">")
+
+    def handle_comment(self, data):
+        write("<!--" + data + "-->")
+
+    def handle_pi(self, data):
+        write("<?" + data + ">")
 
     def is_bsv_code(self):
         ts = self.tag_stack

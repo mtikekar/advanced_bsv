@@ -1,7 +1,7 @@
 Type inference
 ==============
 
-BSV is a strongly typed language in that everything (variables, rules, functions, modules, interfaces, action blocks, etc.) has a type and all type conversions must be done explicitly. As a result, the compiler can infer the types of most things provided we supply a few types at the top level. For example:
+BSV is a strongly typed language in that everything (variables, rules, functions, modules, interfaces, action blocks, etc.) has a type and all type conversions must be done explicitly. Thankfully, the compiler is smart enough to infer the types of most things provided we supply a few types at the top level. For example:
 
 ~~~~ {.bsv}
 interface ExampleIfc;
