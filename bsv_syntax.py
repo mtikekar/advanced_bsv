@@ -5,16 +5,55 @@ import re
 write = sys.stdout.write
 #def write(x): pass
 
-bsv_kw = re.compile(r'\b(method|module|interface|let|return|actionvalue|action|function|typeclass|type|instance)\b')
-bsv_dt = re.compile(r'\b(int|UInt|ActionValue|Action|Put|Reg|FIFO|FIFOF)\b')
+bsv_kw = re.compile(r'\b(begin|method|module|interface|rule|let|return|actionvalue|action|function|typeclass|type|instance)\b')
+bsv_dt = re.compile(r'\b(int|UInt|Integer|Int|Bit|ActionValue|Action|Put|Reg|FIFO|FIFOF)\b')
 bsv_bn = re.compile(r'\b(\d+)\b')
 
-def highlight_bsv(code):
+def highlight_string(code):
     code = bsv_kw.sub(r'<span class="kw">\1</span>', code)
     code = bsv_dt.sub(r'<span class="dt">\1</span>', code)
     code = bsv_bn.sub(r'<span class="bn">\1</span>', code)
     return code
+
 dbg = 0
+
+def uptill(str, substr):
+    assert(substr in str)
+    return str[:str.find(substr)]
+
+def upfrom(str, substr):
+    assert(substr in str)
+    return str[str.find(substr)+len(substr):]
+
+in_comment = False
+def highlight_bsv(block):
+    global in_comment
+    highlighted_lines = []
+    for code in block.splitlines(True):
+        #Multiline comment
+        if in_comment and not r'*/' in code:
+            highlighted_lines.append(code)
+            continue
+        if in_comment:
+            in_comment = False
+            highlighted_lines.append(uptill(code, r'*/'))
+            highlighted_lines.append(r'*/')
+            highlighted_lines.extend(highlight_bsv(upfrom(code, r'*/')))
+            continue
+        if r'/*' in code:
+            highlighted_lines.append(highlight_string(uptill(code, r'/*')))
+            highlighted_lines.append(r'/*')
+            in_comment = True
+            highlighted_lines.extend(highlight_bsv(upfrom(code, r'/*')))
+            continue
+        if r'//' in code:
+            highlighted_lines.append(highlight_string(uptill(code, r'//')))
+            highlighted_lines.append(r'//')
+            highlighted_lines.append(upfrom(code, r'//'))
+            continue
+        highlighted_lines.append(highlight_string(code))
+    return ''.join(highlighted_lines)
+
 class MyParser(HTMLParser):
     def __init__(self):
         HTMLParser.__init__(self)
