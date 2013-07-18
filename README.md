@@ -166,6 +166,8 @@ instance FIFOPop#(FIFOF, t);
 endinstance
 ~~~~
 
+You use it as before: `let val <- pop(f)` and depending on `f`’s type, the compiler will choose the right instance of `pop`.
+
 Variable number of arguments
 ----------------------------
 

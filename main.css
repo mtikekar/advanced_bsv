@@ -1,0 +1,80 @@
+header{
+  text-align: center;
+  border-bottom: 1px solid #aaa;
+}
+
+body{
+  background-color: #ddd;
+}
+
+#content{
+  margin: auto auto;
+  max-width: 40em;
+  background-color: white;
+  padding: 3em;
+  border-radius: 0.5em;
+  box-shadow: 0.25em 0.25em 1em;
+}
+
+code > .kw { color: #007020; }
+code > .dt { color: #902000; }
+code > .bn { color: #40a070; }
+code > .co { color: #404070; }
+
+#TOC{ border-bottom: 1px solid #aaa; padding-bottom: 0.5em;}
+
+#TOC  ul { list-style-type: none}
+a {text-decoration: none; color:black;}
+
+p{
+  font-family: 'Droid Serif', serif;
+  text-align: justify;
+}
+
+h1, h2, h3, h4, h5, h6, a{
+  font-family: 'Droid Sans', sans-serif;
+}
+
+code{
+  font-family: monospace;
+}
+
+pre{
+  background-color: #eee;
+  padding: 1em;
+  border-radius: 0.5em;
+  white-space: pre-wrap;
+  word-wrap: break-word;
+}
+
+table
+    {
+    border-collapse: collapse;
+    border-spacing: 0; /* IE 6 */
+
+    border-bottom: 2pt solid #000;
+    border-top: 2pt solid #000; /* The caption on top will not have a bottom-border */
+
+    /* Center */
+    margin-left: auto;
+    margin-right: auto;
+    }
+    
+thead /* Entire table header */
+    {
+    border-bottom: 1pt solid #000;
+    background-color: #eee; /* Does this BG print well? */
+    }
+
+td, th /* Table cells and table header cells */
+    { 
+    vertical-align: top; /* Word */
+    vertical-align: baseline; /* Others */
+    padding-left:   0.5em;
+    padding-right:  0.5em;
+    padding-top:    0.2em;
+    padding-bottom: 0.2em;
+    }
+tr.even{
+   background-color: #f0f0f0;
+}

@@ -32,24 +32,24 @@ def highlight_bsv(block):
     for code in block.splitlines(True):
         #Multiline comment
         if in_comment and not r'*/' in code:
-            highlighted_lines.append(code)
+            highlighted_lines.append(r'<span class="co">' + code + r'</span>')
             continue
         if in_comment:
             in_comment = False
-            highlighted_lines.append(uptill(code, r'*/'))
-            highlighted_lines.append(r'*/')
+            highlighted_lines.append(r'<span class="co">' + uptill(code, r'*/') + r'*/</span>')
             highlighted_lines.extend(highlight_bsv(upfrom(code, r'*/')))
             continue
         if r'/*' in code:
             highlighted_lines.append(highlight_string(uptill(code, r'/*')))
-            highlighted_lines.append(r'/*')
+            highlighted_lines.append(r'<span class="co">/*</span>')
             in_comment = True
             highlighted_lines.extend(highlight_bsv(upfrom(code, r'/*')))
             continue
         if r'//' in code:
             highlighted_lines.append(highlight_string(uptill(code, r'//')))
-            highlighted_lines.append(r'//')
+            highlighted_lines.append(r'<span class="co">//')
             highlighted_lines.append(upfrom(code, r'//'))
+            highlighted_lines.append(r'</span>')
             continue
         highlighted_lines.append(highlight_string(code))
     return ''.join(highlighted_lines)

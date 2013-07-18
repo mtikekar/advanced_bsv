@@ -1,540 +1,77 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml">
+<!DOCTYPE html>
+<html>
 <head>
-  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-  <meta http-equiv="Content-Style-Type" content="text/css" />
-  <meta name="generator" content="pandoc" />
-  <meta name="author" content="Mehul Tikekar" />
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Mehul Tikekar">
   <title>Advanced features of Bluespec SystemVerilog (BSV)</title>
   <style type="text/css">code{white-space: pre;}</style>
-  <style type="text/css">
-  body { max-width:40em; margin:auto auto; }
-  
-  p { text-align:justify; }
-  
-  table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
-    margin: 0; padding: 0; vertical-align: baseline; border: none; }
-  
-  table.sourceCode { width: 100%; }
-  
-  td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
-  
-  td.sourceCode { padding-left: 5px; }
-  
-  code > span.kw { color: #007020; }
-  code > span.dt { color: #902000; }
-  code > span.dv { color: #40a070; }
-  code > span.bn { color: #40a070; }
-  code > span.fl { color: #40a070; }
-  code > span.ch { color: #4070a0; }
-  code > span.st { color: #4070a0; }
-  code > span.co { color: #60a0b0; font-style: italic; }
-  code > span.ot { color: #007020; }
-  code > span.al { color: #ff0000; font-weight: bold; }
-  code > span.fu { color: #06287e; }
-  code > span.er { color: #ff0000; font-weight: bold; }
-  </style>
-  <style type="text/css">
-  /*
-      Buttondown
-      A Markdown/MultiMarkdown/Pandoc HTML output CSS stylesheet
-      Author: Ryan Gray
-      Date: 15 Feb 2011
-      Revised: 21 Feb 2012
-     
-      General style is clean, with minimal re-definition of the defaults or 
-      overrides of user font settings. The body text and header styles are 
-      left alone except title, author and date classes are centered. A Pandoc TOC 
-      is not printed, URLs are printed after hyperlinks in parentheses. 
-      Block quotes are italicized. Tables are lightly styled with lines above 
-      and below the table and below the header with a boldface header. Code 
-      blocks are line wrapped. 
-  
-      All elements that Pandoc and MultiMarkdown use should be listed here, even 
-      if the style is empty so you can easily add styling to anything.
-      
-      There are some elements in here for HTML5 output of Pandoc, but I have not 
-      gotten around to testing that yet.
-  */
-  
-  /* NOTES:
-  
-      Stuff tried and failed:
-      
-      It seems that specifying font-family:serif in Safari will always use 
-      Times New Roman rather than the user's preferences setting.
-      
-      Making the font size different or a fixed value for print in case the screen 
-      font size is making the print font too big: Making font-size different for 
-      print than for screen causes horizontal lines to disappear in math when using 
-      MathJax under Safari.
-  */
-  
-  /* ---- Front Matter ---- */
-  
-  /* Pandoc header DIV. Contains .title, .author and .date. Comes before div#TOC. 
-     Only appears if one of those three are in the document.
-  */
-  
-  div#header, header
-      {
-      /* Put border on bottom. Separates it from TOC or body that comes after it. */
-      border-bottom: 1px solid #aaa;
-      margin-bottom: 0.5em;
-      }
-  
-  .title /* Pandoc title header (h1.title) */
-      {
-      text-align: center;
-      }
-  
-  .author, .date /* Pandoc author(s) and date headers (h2.author and h3.date) */
-      {
-      text-align: center;
-      }
-  
-  /* Pandoc table of contents DIV when using the --toc option.
-     NOTE: this doesn't support Pandoc's --id-prefix option for #TOC and #header. 
-     Probably would need to use div[id$='TOC'] and div[id$='header'] as selectors.
-  */
-  
-  div#TOC, nav#TOC
-      {
-      /* Put border on bottom to separate it from body. */
-      border-bottom: 1px solid #aaa;
-      margin-bottom: 0.5em;
-      }
-  
-  @media print
-      {
-      div#TOC, nav#TOC
-          {
-          /* Don't display TOC in print */
-          display: none;
-          }
-      }
-  
-  /* ---- Headers and sections ---- */
-  
-  h1, h2, h3, h4, h5, h6
-  {
-      font-family: "Helvetica Neue", Helvetica, "Liberation Sans", Calibri, Arial, sans-serif; /* Sans-serif headers */
-  
-      /* font-family: "Liberation Serif", "Georgia", "Times New Roman", serif; /* Serif headers */
-  
-      page-break-after: avoid; /* Firefox, Chrome, and Safari do not support the property value "avoid" */
-  }
-  
-  /* Pandoc with --section-divs option */
-  
-  div div, section section /* Nested sections */
-      {
-      margin-left: 2em; /* This will increasingly indent nested header sections */
-      }
-  
-  p {}
-  
-  blockquote
-      { 
-      font-style: italic;
-      }
-  
-  li /* All list items */
-      {
-      }
-  
-  li > p /* Loosely spaced list item */
-      {
-      margin-top: 1em; /* IE: lack of space above a <li> when the item is inside a <p> */
-      }
-  
-  ul /* Whole unordered list */
-      {
-      }
-  
-  ul li /* Unordered list item */
-      {
-      }
-  
-  ol /* Whole ordered list */
-      {
-      }
-  
-  ol li /* Ordered list item */
-      {
-      }
-  
-  hr {}
-  
-  /* ---- Some span elements --- */
-  
-  sub /* Subscripts. Pandoc: H~2~O */
-      {
-      }
-  
-  sup /* Superscripts. Pandoc: The 2^nd^ try. */
-      {
-      }
-      
-  em /* Emphasis. Markdown: *emphasis* or _emphasis_ */
-      {
-      }
-      
-  em > em /* Emphasis within emphasis: *This is all *emphasized* except that* */
-      {
-      font-style: normal;
-      }
-  
-  strong /* Markdown **strong** or __strong__ */
-      {
-      }
-  
-  /* ---- Links (anchors) ---- */
-  
-  a /* All links */
-      {
-      /* Keep links clean. On screen, they are colored; in print, they do nothing anyway. */
-      text-decoration: none;
-      }
-  
-  @media screen
-      {
-      a:hover
-          {
-          /* On hover, we indicate a bit more that it is a link. */
-          text-decoration: underline;
-          }
-      }
-  
-  @media print
-      {
-      a   {
-          /* In print, a colored link is useless, so un-style it. */
-          color: black;
-          background: transparent;
-          }
-          
-      a[href^="http://"]:after, a[href^="https://"]:after
-          {
-          /* However, links that go somewhere else, might be useful to the reader,
-             so for http and https links, print the URL after what was the link 
-             text in parens
-          */
-          content: " (" attr(href) ") ";
-          font-size: 90%;
-          }
-      }
-  
-  /* ---- Images ---- */
-  
-  img
-      {
-      /* Let it be inline left/right where it wants to be, but verticality make 
-         it in the middle to look nicer, but opinions differ, and if in a multi-line 
-         paragraph, it might not be so great. 
-      */
-      vertical-align: middle;
-      }
-  
-  div.figure /* Pandoc figure-style image */
-      {
-      /* Center the image and caption */
-      margin-left: auto;
-      margin-right: auto;
-      text-align: center;
-      font-style: italic;
-      }
-  
-  p.caption /* Pandoc figure-style caption within div.figure */
-      {
-      /* Inherits div.figure props by default */
-      }
-  
-  /* ---- Code blocks and spans ---- */
-  
-  pre, code 
-      {
-      background-color: #eeeeee;
-      /* BEGIN word wrap */
-      /* Need all the following to word wrap instead of scroll box */
-      /* This will override the overflow:auto if present */
-      white-space: pre-wrap; /* css-3 */
-      white-space: -moz-pre-wrap !important; /* Mozilla, since 1999 */
-      white-space: -pre-wrap; /* Opera 4-6 */
-      white-space: -o-pre-wrap; /* Opera 7 */
-      word-wrap: break-word; /* Internet Explorer 5.5+ */
-      /* END word wrap */
-      }
-  
-  pre /* Code blocks */
-      {
-      /* Distinguish pre blocks from other text by more than the font with a background tint. */
-      padding: 0.5em; /* Since we have a background color */
-      border-radius: 5px; /* Softens it */
-      /* Give it a some definition */
-      border: 1px solid #aaa;
-      /* Set it off left and right, seems to look a bit nicer when we have a background */
-      margin-left:  0.5em;
-      margin-right: 0.5em;
-      }
-  
-  @media screen
-      {
-      pre
-          {
-          /* On screen, use an auto scroll box for long lines, unless word-wrap is enabled */
-          white-space: pre;
-          overflow: auto;
-          /* Dotted looks better on screen and solid seems to print better. */
-          /* border: 1px dotted #777; */
-          border: 1px none;
-          }
-      }
-  
-  code /* All inline code spans */
-      {
-      }
-  
-  p > code, li > code, td > code, p > strong > code /* Code spans in paragraphs and tight lists and tables */
-      {
-      /* Pad a little from adjacent text */
-      background-color:white;
-      padding-left:  2px;
-      padding-right: 2px;
-      }
-      
-  li > p code /* Code span in a loose list */
-      {
-      /* We have room for some more background color above and below */
-      padding: 2px;
-      }
-  
-  /* ---- Math ---- */
-  
-  span.math /* Pandoc inline math default and --jsmath inline math */
-      {
-      /* Tried font-style:italic here, and it messed up MathJax rendering in some browsers. Maybe don't mess with at all. */
-      }
-      
-  div.math /* Pandoc --jsmath display math */
-      {
-      }
-      
-  span.LaTeX /* Pandoc --latexmathml math */
-      {
-      } 
-  
-  eq /* Pandoc --gladtex math */
-      {
-      } 
-  
-  /* ---- Tables ---- */
-  
-  /*  A clean textbook-like style with horizontal lines above and below and under 
-      the header. Rows highlight on hover to help scanning the table on screen.
-  */
-  
-  table
-      {
-      border-collapse: collapse;
-      border-spacing: 0; /* IE 6 */
-  
-      border-bottom: 2pt solid #000;
-      border-top: 2pt solid #000; /* The caption on top will not have a bottom-border */
-  
-      /* Center */
-      margin-left: auto;
-      margin-right: auto;
-      }
-      
-  thead /* Entire table header */
-      {
-      border-bottom: 1pt solid #000;
-      background-color: #eee; /* Does this BG print well? */
-      }
-  
-  tr.header /* Each header row */
-      {
-      } 
-  
-  tbody /* Entire table  body */
-      {
-      }
-  
-  /* Table body rows */
-  
-  tr  {
-      }
-  tr.odd:hover, tr.even:hover /* Use .odd and .even classes to avoid styling rows in other tables */
-      {
-      background-color: #eee;
-      }
-      
-  /* Odd and even rows */
-  tr.odd {}
-  tr.even {}
-  
-  td, th /* Table cells and table header cells */
-      { 
-      vertical-align: top; /* Word */
-      vertical-align: baseline; /* Others */
-      padding-left:   0.5em;
-      padding-right:  0.5em;
-      padding-top:    0.2em;
-      padding-bottom: 0.2em;
-      }
-      
-  /* Removes padding on left and right of table for a tight look. Good if thead has no background color*/
-  /*
-  tr td:last-child, tr th:last-child
-      {
-      padding-right: 0;
-      }
-  tr td:first-child, tr th:first-child 
-      {
-      padding-left: 0;
-      }
-  */
-  
-  th /* Table header cells */
-      {
-      font-weight: bold; 
-      }
-  
-  tfoot /* Table footer (what appears here if caption is on top?) */
-      {
-      }
-  
-  caption /* This is for a table caption tag, not the p.caption Pandoc uses in a div.figure */
-      {
-      caption-side: top;
-      border: none;
-      font-size: 0.9em;
-      font-style: italic;
-      text-align: center;
-      margin-bottom: 0.3em; /* Good for when on top */
-      padding-bottom: 0.2em;
-      }
-  
-  /* ---- Definition lists ---- */
-  
-  dl /* The whole list */
-      {
-      border-top: 2pt solid black;
-      padding-top: 0.5em;
-      border-bottom: 2pt solid black;
-      }
-  
-  dt /* Definition term */
-      {
-      font-weight: bold;
-      }
-  
-  dd+dt /* 2nd or greater term in the list */
-      {
-      border-top: 1pt solid black;
-      padding-top: 0.5em;
-      }
-      
-  dd /* A definition */
-      {
-      margin-bottom: 0.5em;
-      }
-  
-  dd+dd /* 2nd or greater definition of a term */
-      {
-      border-top: 1px solid black; /* To separate multiple definitions */
-      }
-      
-  /* ---- Footnotes ---- */
-  
-  a.footnote, a.footnoteRef { /* Pandoc, MultiMarkdown footnote links */
-      font-size: small; 
-      vertical-align: text-top;
-  }
-  
-  a[href^="#fnref"], a.reversefootnote /* Pandoc, MultiMarkdown, ?? footnote back links */
-      {
-      }
-  
-  @media print
-      {
-      a[href^="#fnref"], a.reversefootnote /* Pandoc, MultiMarkdown */
-          {
-          /* Don't display these at all in print since the arrow is only something to click on */
-          display: none;
-          }
-      }
-      
-  div.footnotes /* Pandoc footnotes div at end of the document */
-      {
-      }
-      
-  div.footnotes li[id^="fn"] /* A footnote item within that div */
-      {
-      }
-  
-  /* You can class stuff as "noprint" to not print. 
-     Useful since you can't set this media conditional inside an HTML element's 
-     style attribute (I think), and you don't want to make another stylesheet that 
-     imports this one and adds a class just to do this.
-  */
-  
-  @media print
-      {
-      .noprint
-          {
-          display:none;
-          }
-      }
-  </style>
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  <link rel="stylesheet" href="main.css">
 </head>
 <body>
-<div id="header">
+<div id="content">
+<header>
 <h1 class="title">Advanced features of Bluespec SystemVerilog (BSV)</h1>
 <h2 class="author">Mehul Tikekar</h2>
-</div>
-<h1 id="type-inference">Type inference</h1>
-<p>BSV is a strongly typed language in that everything (variables, rules, functions, modules, interfaces, action blocks, etc.) has a type and all type conversions must be done explicitly. As a result, the compiler can infer the types of most things provided we supply a few types at the top level. For example:</p>
+</header>
+<nav id="TOC">
+<ul>
+<li><a href="#type-inference">Type inference</a></li>
+<li><a href="#function-magic">Function magic</a><ul>
+<li><a href="#functions-are-first-class-objects">Functions are first-class objects</a></li>
+<li><a href="#currying">Currying</a></li>
+</ul></li>
+<li><a href="#typeclass-and-instance">Typeclass and instance</a><ul>
+<li><a href="#typeclasses-for-overloading-functions">Typeclasses for overloading functions</a></li>
+<li><a href="#variable-number-of-arguments">Variable number of arguments</a></li>
+<li><a href="#typeclasses-and-recursion">Typeclasses and recursion</a></li>
+</ul></li>
+</ul>
+</nav>
+<h1 id="type-inference"><a href="#type-inference">Type inference</a></h1>
+<p>BSV is a strongly typed language in that everything (variables, rules, functions, modules, interfaces, action blocks, etc.) has a type and all type conversions must be done explicitly. Thankfully, the compiler is smart enough to infer the types of most things provided we supply a few types at the top level. For example:</p>
 <pre class="bsv"><code><span class="kw">interface</span> ExampleIfc;
     <span class="kw">interface</span> <span class="dt">Put</span>#(<span class="dt">UInt</span>#(<span class="bn">4</span>)) some_subifc;
     <span class="kw">method</span> <span class="dt">ActionValue</span>#(<span class="dt">UInt</span>#(<span class="bn">8</span>)) some_method (<span class="dt">UInt</span>#(<span class="bn">7</span>) arg);
 endinterface
 
 <span class="kw">module</span> mkExample(ExampleIfc);
-    <span class="kw">let</span> f1 &lt;- mkFIFO;    // f1 is of type FIFO#(...)
-    <span class="kw">let</span> r1 &lt;- mkReg(<span class="bn">0</span>);  // r1 is of type Reg#(...)
-    <span class="kw">let</span> r2 &lt;- mkReg(<span class="bn">0</span>);  // r2 is of type Reg#(...)
-
+    <span class="kw">let</span> f1 &lt;- mkFIFO;    <span class="co">// f1 is of type FIFO#(...)
+</span>    <span class="kw">let</span> r1 &lt;- mkReg(<span class="bn">0</span>);  <span class="co">// r1 is of type Reg#(...)
+</span>    <span class="kw">let</span> r2 &lt;- mkReg(<span class="bn">0</span>);  <span class="co">// r2 is of type Reg#(...)
+</span>
     <span class="kw">interface</span> <span class="dt">Put</span> some_subifc = toPut(f1);
-        // f1 is of type FIFO#(UInt#(4))
-
+        <span class="co">// f1 is of type FIFO#(UInt#(4))
+</span>
     <span class="kw">method</span> some_method(arg) = <span class="kw">actionvalue</span>
-        r1 &lt;= arg; // r1 is of type Reg#(UInt#(7))
-        <span class="kw">return</span> r2; // r2 is of type Reg#(UInt#(8))
-    endactionvalue;
+        r1 &lt;= arg; <span class="co">// r1 is of type Reg#(UInt#(7))
+</span>        <span class="kw">return</span> r2; <span class="co">// r2 is of type Reg#(UInt#(8))
+</span>    endactionvalue;
 endmodule</code></pre>
 <p>Thus, the <code>let</code> keyword can be used to avoid specifying any types redundantly. Incidentally, <code>let</code> can also unpack tuples: <code>let {a, b} = some_tuple2</code>. <code>let</code> is however forbidden in the top level context - it must be used only inside a module, function, etc.</p>
 <p>Similarly, functions defined within other modules or functions need not specify argument types or return types if the compiler can infer them. That is, <code>function int f1(int x, int y)</code> can be written simply as <code>function f1(x, y)</code>. And what’s more, the function is automatically polymorphic. That is,</p>
 <pre class="bsv"><code><span class="kw">function</span> f(x) = <span class="bn">2</span>*x;
 <span class="dt">Integer</span> a = <span class="bn">15</span>;
 <span class="dt">UInt</span>#(<span class="bn">4</span>) b = <span class="bn">15</span>;
-$display(f(a), f(b)); // Prints 30 14</code></pre>
-<h1 id="function-magic">Function magic</h1>
-<h2 id="functions-are-first-class-objects">Functions are first-class objects</h2>
+$display(f(a), f(b)); <span class="co">// Prints 30 14</span></code></pre>
+<h1 id="function-magic"><a href="#function-magic">Function magic</a></h1>
+<h2 id="functions-are-first-class-objects"><a href="#functions-are-first-class-objects">Functions are first-class objects</a></h2>
 <p>In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. <strong>Basically, functions can be used in any context where a variable can be used.</strong> This lets us do things like:</p>
 <pre class="bsv"><code><span class="kw">function</span> f1(x, y) = x + y;
 <span class="kw">let</span> g = f1;
-<span class="dt">int</span> h = g(<span class="bn">1</span>, <span class="bn">2</span>); // h is 3</code></pre>
+<span class="dt">int</span> h = g(<span class="bn">1</span>, <span class="bn">2</span>); <span class="co">// h is 3</span></code></pre>
 <p>Or this:</p>
 <pre class="bsv"><code><span class="kw">function</span> g1(f, x, y) = f(x, y);
-<span class="dt">int</span> h = g1(f1, <span class="bn">1</span>, <span class="bn">2</span>); // h is 3 again</code></pre>
+<span class="dt">int</span> h = g1(f1, <span class="bn">1</span>, <span class="bn">2</span>); <span class="co">// h is 3 again</span></code></pre>
 <p>If a function is a variable, what is its type? In this case, <code>f1</code> is of type “a function that expects two ints and returns an int”. In BSV, this is written as <code>function int f(int x1, int x2)</code>. Knowing this, the function <code>g1</code> above can be defined with explicit types as follows:</p>
 <pre class="bsv"><code><span class="kw">function</span> <span class="dt">int</span> g1(<span class="kw">function</span> <span class="dt">int</span> f1(<span class="dt">int</span> a, <span class="dt">int</span> b), <span class="dt">int</span> x, <span class="dt">int</span> y)
   = f1(x, y);</code></pre>
 <p>Knowing the types of objects is going to help understand latter parts of this text better. Writing the full type every time is cumbersome, so I’ll use a shorthand notation:</p>
 <pre class="bsv"><code><span class="kw">function</span> <span class="dt">int</span> f(<span class="dt">int</span> x1, <span class="dt">int</span> x2) &lt;=&gt; (<span class="dt">int</span>, <span class="dt">int</span>) -&gt; <span class="dt">int</span></code></pre>
-<h2 id="currying">Currying</h2>
+<h2 id="currying"><a href="#currying">Currying</a></h2>
 <p>In BSV, <code>f1(x, y)</code> can be written instead as <code>f1(x)(y)</code>. So, we can evaluate <code>f1</code> on <code>x</code> and <code>y</code> as:</p>
 <pre class="bsv"><code><span class="kw">let</span> val = f1(x, y);</code></pre>
 <p>or</p>
@@ -546,22 +83,22 @@ $display(f(a), f(b)); // Prints 30 14</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Object</th>
-<th align="left">Type</th>
+<th style="text-align: left;">Object</th>
+<th style="text-align: left;">Type</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>val = f1(x, y)</code></td>
-<td align="left"><code>int</code></td>
+<td style="text-align: left;"><code>val = f1(x, y)</code></td>
+<td style="text-align: left;"><code>int</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>fx = f1(x)</code></td>
-<td align="left"><code>int -&gt; int</code></td>
+<td style="text-align: left;"><code>fx = f1(x)</code></td>
+<td style="text-align: left;"><code>int -&gt; int</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>f1</code></td>
-<td align="left"><code>(int, int) -&gt; int</code></td>
+<td style="text-align: left;"><code>f1</code></td>
+<td style="text-align: left;"><code>(int, int) -&gt; int</code></td>
 </tr>
 </tbody>
 </table>
@@ -578,8 +115,8 @@ endfunction</code></pre>
 <pre class="bsv"><code>f(x, y)           &lt;=&gt; f(x)(y)
 (<span class="dt">int</span>, <span class="dt">int</span>) -&gt; <span class="dt">int</span> &lt;=&gt; <span class="dt">int</span> -&gt; (<span class="dt">int</span> -&gt; <span class="dt">int</span>)</code></pre>
 <p>The parentheses can be dropped without ambiguity to specify <code>f1</code>’s type as <code>int -&gt; int -&gt; int</code>.</p>
-<h1 id="typeclass-and-instance">Typeclass and instance</h1>
-<h2 id="typeclasses-for-overloading-functions">Typeclasses for overloading functions</h2>
+<h1 id="typeclass-and-instance"><a href="#typeclass-and-instance">Typeclass and instance</a></h1>
+<h2 id="typeclasses-for-overloading-functions"><a href="#typeclasses-for-overloading-functions">Typeclasses for overloading functions</a></h2>
 <p>In BSV, parametrization and typeclasses are two mechanisms to implement overloaded functions. For example, I would like a <code>pop</code> function on <code>FIFO</code> interfaces that combines <code>deq</code> and <code>first</code> into one <code>ActionValue</code>. This can be written as a function parametrized on <code>FIFO</code>’s data type:</p>
 <pre class="bsv"><code><span class="kw">function</span> <span class="dt">ActionValue</span>#(d) pop(<span class="dt">FIFO</span>#(d) f)
   = <span class="kw">actionvalue</span>
@@ -591,7 +128,7 @@ endfunction</code></pre>
 
 <span class="kw">rule</span> ...
    <span class="kw">let</span> val &lt;- pop(f);
-   // instead of let val = f.first; f.deq;</code></pre>
+   <span class="co">// instead of let val = f.first; f.deq;</span></code></pre>
 <p>If I want to overload it further so it works with both <code>FIFO</code> and <code>FIFOF</code> interfaces, a typeclass is needed. The idea is to capture the common behavior in the typeclass and define specific instances for different types. This can be done as follows:</p>
 <pre class="bsv"><code><span class="kw">typeclass</span> FIFOPop#(<span class="kw">type</span> ifc_fifo, <span class="kw">type</span> t_fifo);
     <span class="kw">function</span> <span class="dt">ActionValue</span>#(t_fifo) pop(ifc_fifo#(t_fifo) f);
@@ -610,7 +147,8 @@ endinstance
         <span class="kw">return</span> f.first;
     endactionvalue;
 endinstance</code></pre>
-<h2 id="variable-number-of-arguments">Variable number of arguments</h2>
+<p>You use it as before: <code>let val &lt;- pop(f)</code> and depending on <code>f</code>’s type, the compiler will choose the right instance of <code>pop</code>.</p>
+<h2 id="variable-number-of-arguments"><a href="#variable-number-of-arguments">Variable number of arguments</a></h2>
 <p>Let’s say we have a function <code>f(x, y, z)</code> where the last two arguments are optional and have a default value of 1 and 2 respectively. That is, we want a function <code>f1</code> such that:</p>
 <pre class="bsv"><code>f1(x)       = f(x, <span class="bn">1</span>, <span class="bn">2</span>)
 f1(x, y)    = f(x, y, <span class="bn">2</span>)
@@ -619,26 +157,26 @@ f1(x, y, z) = f(x, y, z)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Normal form</th>
-<th align="left">Curried form</th>
-<th align="left">Return type of <code>f1(x)</code></th>
+<th style="text-align: left;">Normal form</th>
+<th style="text-align: left;">Curried form</th>
+<th style="text-align: left;">Return type of <code>f1(x)</code></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>f1(x)</code></td>
-<td align="left"><code>f1(x)</code></td>
-<td align="left"><code>int</code></td>
+<td style="text-align: left;"><code>f1(x)</code></td>
+<td style="text-align: left;"><code>f1(x)</code></td>
+<td style="text-align: left;"><code>int</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>f1(x, y)</code></td>
-<td align="left"><code>f1(x)(y)</code></td>
-<td align="left"><code>int -&gt; int</code></td>
+<td style="text-align: left;"><code>f1(x, y)</code></td>
+<td style="text-align: left;"><code>f1(x)(y)</code></td>
+<td style="text-align: left;"><code>int -&gt; int</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>f1(x, y, z)</code></td>
-<td align="left"><code>f1(x)(y, z)</code></td>
-<td align="left"><code>(int, int) -&gt; int</code></td>
+<td style="text-align: left;"><code>f1(x, y, z)</code></td>
+<td style="text-align: left;"><code>f1(x)(y, z)</code></td>
+<td style="text-align: left;"><code>(int, int) -&gt; int</code></td>
 </tr>
 </tbody>
 </table>
@@ -680,33 +218,33 @@ endinstance
 <span class="kw">instance</span> F1#(<span class="kw">function</span> <span class="dt">int</span> func(<span class="dt">int</span> y, <span class="dt">int</span> z));
     <span class="kw">function</span> f1(x, y, z) = f(x, y, z);
 endinstance</code></pre>
-<h2 id="typeclasses-and-recursion">Typeclasses and recursion</h2>
+<h2 id="typeclasses-and-recursion"><a href="#typeclasses-and-recursion">Typeclasses and recursion</a></h2>
 <p>Typeclasses with recursive instances can be used to implement some interesting ideas.</p>
-<h3 id="arbitrary-number-of-arguments">Arbitrary number of arguments</h3>
+<h3 id="arbitrary-number-of-arguments"><a href="#arbitrary-number-of-arguments">Arbitrary number of arguments</a></h3>
 <p>We would like an <code>add</code> function with two or more number of arguments. We’ll choose a similar strategy as for variable number of arguments. The only difference is that the base case is now a function with two arguments. Making a similar table as before:</p>
 <table>
 <thead>
 <tr class="header">
-<th align="left">Normal form</th>
-<th align="left">Curried form</th>
-<th align="left">Type of <code>add(x1, x2)</code></th>
+<th style="text-align: left;">Normal form</th>
+<th style="text-align: left;">Curried form</th>
+<th style="text-align: left;">Type of <code>add(x1, x2)</code></th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left"><code>add(x1, x2)</code></td>
-<td align="left"><code>add(x1, x2)</code></td>
-<td align="left"><code>int</code></td>
+<td style="text-align: left;"><code>add(x1, x2)</code></td>
+<td style="text-align: left;"><code>add(x1, x2)</code></td>
+<td style="text-align: left;"><code>int</code></td>
 </tr>
 <tr class="even">
-<td align="left"><code>add(x1, x2, x3)</code></td>
-<td align="left"><code>add(x1, x2)(x3)</code></td>
-<td align="left"><code>int -&gt; int</code></td>
+<td style="text-align: left;"><code>add(x1, x2, x3)</code></td>
+<td style="text-align: left;"><code>add(x1, x2)(x3)</code></td>
+<td style="text-align: left;"><code>int -&gt; int</code></td>
 </tr>
 <tr class="odd">
-<td align="left"><code>add(x1, x2, x3, x4)</code></td>
-<td align="left"><code>add(x1, x2)(x3)(x4)</code></td>
-<td align="left"><code>int -&gt; int -&gt; int</code></td>
+<td style="text-align: left;"><code>add(x1, x2, x3, x4)</code></td>
+<td style="text-align: left;"><code>add(x1, x2)(x3)(x4)</code></td>
+<td style="text-align: left;"><code>int -&gt; int -&gt; int</code></td>
 </tr>
 </tbody>
 </table>
@@ -717,12 +255,12 @@ endinstance</code></pre>
 endtypeclass
 
 <span class="kw">instance</span> AddArb#(<span class="dt">int</span>); 
-    // d = int
-    <span class="kw">function</span> <span class="dt">int</span> add(<span class="dt">int</span> x1, <span class="dt">int</span> x2) = x1 + x2;
+    <span class="co">// d = int
+</span>    <span class="kw">function</span> <span class="dt">int</span> add(<span class="dt">int</span> x1, <span class="dt">int</span> x2) = x1 + x2;
 endinstance
 
 <span class="kw">instance</span> AddArb#(<span class="kw">function</span> d1 f(<span class="dt">int</span> x)) provisos(AddArb#(d1));
-    // d = int -&gt; d
+    <span class="co">// d = int -</span>&gt; d
     <span class="kw">function</span> <span class="kw">function</span> d1 f(<span class="dt">int</span> x) add(<span class="dt">int</span> x1, <span class="dt">int</span> x2);
         <span class="kw">function</span> f2(x3) = add(x1 + x2, x3);
         <span class="kw">return</span> f2;
@@ -737,11 +275,11 @@ endinstance
     <span class="kw">function</span> add(x1, x2, x3) = add(x1 + x2, x3);
 endinstance</code></pre>
 <p>As an exercise, extend this <code>add</code> function to accept one argument (<code>add(x) = x</code>) and no arguments (<code>add = 0</code>).</p>
-<h3 id="adder-tree">Adder tree</h3>
+<h3 id="adder-tree"><a href="#adder-tree">Adder tree</a></h3>
 <p>This is a more complicated example of a typeclass that implements an adder tree as a pipelined module and as a combinational function. The input is an <code>n</code>-long vector of <code>UInt#(nbits)</code> elements and in each stage of the tree the partial sums increase in bitwidth by 1. The final result is of type <code>UInt#(nbits + log2(n))</code>.</p>
 <pre class="bsv"><code><span class="kw">interface</span> AdderTree#(numeric <span class="kw">type</span> n, numeric <span class="kw">type</span> nbits);
-    // The interface to the pipelined module
-    <span class="kw">method</span> <span class="dt">Action</span> put_vector(Vector#(n, <span class="dt">UInt</span>#(nbits)) vec);
+    <span class="co">// The interface to the pipelined module
+</span>    <span class="kw">method</span> <span class="dt">Action</span> put_vector(Vector#(n, <span class="dt">UInt</span>#(nbits)) vec);
     <span class="kw">method</span> <span class="dt">ActionValue</span>#(<span class="dt">UInt</span>#(TAdd#(TLog#(n), nbits))) get_result;
 endinterface
 
@@ -753,8 +291,8 @@ endinterface
 endtypeclass
 
 <span class="kw">instance</span> Adder#(<span class="bn">2</span>, nbits);
-    // Base instance of 2-long vector
-    <span class="kw">module</span> mkAdderTree(AdderTree#(<span class="bn">2</span>, nbits));
+    <span class="co">// Base instance of 2-long vector
+</span>    <span class="kw">module</span> mkAdderTree(AdderTree#(<span class="bn">2</span>, nbits));
         <span class="kw">let</span> f &lt;- mkFIFO;
         <span class="kw">method</span> put_vector(vec) = f.enq(extend(vec[<span class="bn">0</span>]) + extend(vec[<span class="bn">1</span>]));
         <span class="kw">method</span> get_result = pop(f);
@@ -768,10 +306,10 @@ endinstance
               Add#(b__, TLog#(hn), TLog#(n)),
               Adder#(hn, nbits));
 
-    // General case
-    <span class="kw">module</span> mkAdderTree(AdderTree#(n, nbits));
-        // two subtrees
-        AdderTree#(hn, nbits) g1 &lt;- mkAdderTree;
+    <span class="co">// General case
+</span>    <span class="kw">module</span> mkAdderTree(AdderTree#(n, nbits));
+        <span class="co">// two subtrees
+</span>        AdderTree#(hn, nbits) g1 &lt;- mkAdderTree;
         AdderTree#(hn, nbits) g2 &lt;- mkAdderTree;
         <span class="kw">let</span> f &lt;- mkFIFO;
 
@@ -782,8 +320,8 @@ endinstance
         endrule
 
         <span class="kw">method</span> put_vector(vec) = <span class="kw">action</span>
-            /* Put the first and second half 
-            of the vector in the subtrees */
+            <span class="co">/*</span><span class="co"> Put the first and second half 
+</span><span class="co">            of the vector in the subtrees */</span>
             g1.put_vector(take(vec));
             g2.put_vector(takeTail(vec));
         endaction;
@@ -800,5 +338,6 @@ endinstance
     end;
 endinstance</code></pre>
 <p>The module can be instantiated as any normal module. <code>TreeAdder#(16, 10) adder &lt;- mkAdderTree</code>. The function can be used on any appropriate vector of <code>UInts</code>. In this example, the length of the vector is constrained by the provisos to be a power of 2. Try changing the code to remove this constraint.</p>
+</div>
 </body>
 </html>
