@@ -21,7 +21,8 @@ code > .dt { color: #902000; }
 code > .bn { color: #40a070; }
 code > .co { color: #404070; }
 
-#TOC{ border-bottom: 1px solid #aaa; padding-bottom: 0.5em;}
+#TOC{ 
+  border-bottom: 1px solid #aaa; padding-bottom: 0.5em;}
 
 #TOC  ul { list-style-type: none}
 a {text-decoration: none; color:black;}
@@ -36,7 +37,8 @@ h1, h2, h3, h4, h5, h6, a{
 }
 
 code{
-  font-family: monospace;
+  font-family: 'Lucida Console', Monaco, monospace;
+  font-size: 90%;
 }
 
 pre{
