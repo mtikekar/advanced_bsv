@@ -88,6 +88,7 @@ class MyParser(HTMLParser):
         write(self.get_starttag_text())
 
     def handle_endtag(self, tag):
+        global inline_comment
         ts = self.tag_stack
         if len(ts) > 0 and ts[-1][0] != 'head':
             assert(ts.pop()[0] == tag)
@@ -96,8 +97,8 @@ class MyParser(HTMLParser):
 
         if dbg: print ts
         if tag == 'code' and inline_comment:
-            inline_commment = False
-            write(r'</span>')
+            inline_comment = False
+            write(stop_co)
         write("</" + tag + ">")
 
     def handle_startendtag(self, tag, attrs):
