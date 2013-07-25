@@ -62,14 +62,14 @@ $display(f(a), f(b)); <span class="co">// Prints 30 14</span></code></pre>
 <h1 id="function-magic"><a href="#function-magic">Function magic</a></h1>
 <h2 id="functions-are-first-class-objects"><a href="#functions-are-first-class-objects">Functions are first-class objects</a></h2>
 <p>In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. <em>Basically, functions can be used in any context where a variable can be used.</em> This lets us do things like:</p>
-<pre class="bsv"><code>function f1(x, y) = x + y;</span>
+<pre class="bsv"><code><span class="kw">function</span> f1(x, y) = x + y;
 <span class="kw">let</span> g = f1;
 <span class="dt">int</span> h = g(<span class="bn">1</span>, <span class="bn">2</span>); <span class="co">// h is 3</span></code></pre>
 <p>Or this:</p>
-<pre class="bsv"><code>function g1(f, x, y) = f(x, y);</span>
+<pre class="bsv"><code><span class="kw">function</span> g1(f, x, y) = f(x, y);
 <span class="dt">int</span> h = g1(f1, <span class="bn">1</span>, <span class="bn">2</span>); <span class="co">// h is 3 again</span></code></pre>
-<p>If a function is a variable, what is its type? In this case, <code>f1</span></code> is of type “a function that expects two ints and returns an int”. In BSV, this is written as <code>function int f(int x1, int x2)</span></code>. Knowing this, the function <code>g1</span></code> above can be defined with explicit types as follows:</p>
-<pre class="bsv"><code>function int g1(function int f1(int a, int b), int x, int y)</span>
+<p>If a function is a variable, what is its type? In this case, <code>f1</code> is of type “a function that expects two ints and returns an int”. In BSV, this is written as <code>function int f(int x1, int x2)</code>. Knowing this, the function <code>g1</code> above can be defined with explicit types as follows:</p>
+<pre class="bsv"><code><span class="kw">function</span> <span class="dt">int</span> g1(<span class="kw">function</span> <span class="dt">int</span> f1(<span class="dt">int</span> a, <span class="dt">int</span> b), <span class="dt">int</span> x, <span class="dt">int</span> y)
   = f1(x, y);</code></pre>
 <p>Knowing the types of objects is going to help understand latter parts of this text better. Writing the full type every time is cumbersome, so I’ll use a shorthand notation:</p>
 <pre class="bsv"><code><span class="kw">function</span> <span class="dt">int</span> f(<span class="dt">int</span> x1, <span class="dt">int</span> x2) &lt;=&gt; (<span class="dt">int</span>, <span class="dt">int</span>) -&gt; <span class="dt">int</span></code></pre>
@@ -131,8 +131,8 @@ endfunction</code></pre>
 <span class="kw">rule</span> ...
    <span class="kw">let</span> val &lt;- pop(f);
    <span class="co">// instead of let val = f.first; f.deq;</span></code></pre>
-<p>If I want to overload it further so it works with both <code>FIFO</span></code> and <code>FIFOF</span></code> interfaces, a typeclass is needed. The idea is to capture the common behavior in the typeclass and define specific instances for different types. This can be done as follows:</p>
-<pre class="bsv"><code>typeclass FIFOPop#(type ifc_fifo, type t_fifo);</span>
+<p>If I want to overload it further so it works with both <code>FIFO</code> and <code>FIFOF</code> interfaces, a typeclass is needed. The idea is to capture the common behavior in the typeclass and define specific instances for different types. This can be done as follows:</p>
+<pre class="bsv"><code><span class="kw">typeclass</span> FIFOPop#(<span class="kw">type</span> ifc_fifo, <span class="kw">type</span> t_fifo);
     <span class="kw">function</span> <span class="dt">ActionValue</span>#(t_fifo) pop(ifc_fifo#(t_fifo) f);
 endtypeclass
 
