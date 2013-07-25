@@ -41,7 +41,7 @@ Function magic
 Functions are first-class objects
 ---------------------------------
 
-In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. **Basically, functions can be used in any context where a variable can be used.** This lets us do things like:
+In BSV, functions can be assigned to variables, passed as arguments to other functions, and returned by other functions. *Basically, functions can be used in any context where a variable can be used.* This lets us do things like:
 
 ~~~~ {.bsv}
 function f1(x, y) = x + y;
@@ -99,7 +99,7 @@ That is, `f1(x)` is a function (named `fx` in the above example), that expects `
 |`fx = f1(x)`|`int -> int`|
 |`f1`|`(int, int) -> int`|
 
-The type of `f1(x)` being `int -> int` means that the type of `f1` is also `int -> (int -> int)`. **Thus, the function type `(int, int) -> int` can also be written as `int -> (int -> int)`.** This feature is called currying. BSV has two somewhat related functions in its standard library called, confusingly, curry and uncurry. We won’t deal with them here.
+The type of `f1(x)` being `int -> int` means that the type of `f1` is also `int -> (int -> int)`. *Thus, the function type `(int, int) -> int` can also be written as `int -> (int -> int)`.* This feature is called currying. BSV has two somewhat related functions in its standard library called, confusingly, curry and uncurry. We won’t deal with them here.
 
 In BSV, currying works in the reverse too. That is, for a function `f2` defined as
 
@@ -307,7 +307,8 @@ instance Adder#(2, nbits);
     // Base instance of 2-long vector
     module mkAdderTree(AdderTree#(2, nbits));
         let f <- mkFIFO;
-        method put_vector(vec) = f.enq(extend(vec[0]) + extend(vec[1]));
+        method put_vector(vec) = f.enq(extend(vec[0]) 
+                                     + extend(vec[1]));
         method get_result = pop(f);
     endmodule
 

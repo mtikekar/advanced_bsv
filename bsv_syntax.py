@@ -15,6 +15,9 @@ def highlight_string(code):
     code = bsv_bn.sub(r'<span class="bn">\1</span>', code)
     return code
 
+start_co = r'<span class="co">'
+stop_co = r'</span>'
+
 dbg = 0
 
 def uptill(str, substr):
@@ -26,30 +29,45 @@ def upfrom(str, substr):
     return str[str.find(substr)+len(substr):]
 
 in_comment = False
+inline_comment = False
 def highlight_bsv(block):
     global in_comment
+    global inline_comment
     highlighted_lines = []
     for code in block.splitlines(True):
-        #Multiline comment
+        # Inline and Multiline comment
+        if inline_comment:
+            if code.endswith('\n'): 
+                highlighted_lines.append(code[:-1] + stop_co + '\n')
+                inline_comment = False
+            else:
+                highlighted_lines.append(code)
+            continue
         if in_comment and not r'*/' in code:
-            highlighted_lines.append(r'<span class="co">' + code + r'</span>')
+            if code.endswith('\n'):
+                highlighted_lines.append(start_co + code[:-1] + stop_co + '\n')
+            else:
+                highlighted_lines.append(start_co + code + stop_co)
             continue
         if in_comment:
             in_comment = False
-            highlighted_lines.append(r'<span class="co">' + uptill(code, r'*/') + r'*/</span>')
+            highlighted_lines.append(start_co + uptill(code, r'*/') + r'*/' + stop_co)
             highlighted_lines.extend(highlight_bsv(upfrom(code, r'*/')))
             continue
         if r'/*' in code:
             highlighted_lines.append(highlight_string(uptill(code, r'/*')))
-            highlighted_lines.append(r'<span class="co">/*</span>')
+            highlighted_lines.append(start_co + r'/*' + stop_co)
             in_comment = True
             highlighted_lines.extend(highlight_bsv(upfrom(code, r'/*')))
             continue
         if r'//' in code:
             highlighted_lines.append(highlight_string(uptill(code, r'//')))
-            highlighted_lines.append(r'<span class="co">//')
-            highlighted_lines.append(upfrom(code, r'//'))
-            highlighted_lines.append(r'</span>')
+            highlighted_lines.append(start_co + r'//')
+            if code.endswith('\n'):
+                highlighted_lines.append(upfrom(code, r'//')[:-1] + stop_co + '\n')
+            else:
+                highlighted_lines.append(upfrom(code, r'//'))
+                inline_comment = True
             continue
         highlighted_lines.append(highlight_string(code))
     return ''.join(highlighted_lines)
@@ -77,6 +95,9 @@ class MyParser(HTMLParser):
             ts.pop()
 
         if dbg: print ts
+        if tag == 'code' and inline_comment:
+            inline_commment = False
+            write(r'</span>')
         write("</" + tag + ">")
 
     def handle_startendtag(self, tag, attrs):

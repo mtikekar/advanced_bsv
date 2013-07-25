@@ -1,39 +1,42 @@
 header{
   text-align: center;
-  border-bottom: 1px solid #aaa;
+  border-bottom: 4pt solid #d0d6b1;
+  color: #192823;
 }
 
 body{
-  background-color: #ddd;
+  background-color: #d0d6b1;
 }
 
 #content{
   margin: auto auto;
   max-width: 40em;
   background-color: white;
-  padding: 3em;
+  padding: 5%;
   border-radius: 0.5em;
   box-shadow: 0.25em 0.25em 1em;
 }
 
-code > .kw { color: #007020; }
-code > .dt { color: #902000; }
-code > .bn { color: #40a070; }
-code > .co { color: #404070; }
+code > .co { color: #218559; }
+code > .dt { color: #dd1e2f; }
+code > .bn { color: #218559; }
+code > .kw { color: #035165; }
 
-#TOC{ 
-  border-bottom: 1px solid #aaa; padding-bottom: 0.5em;}
+#content > h1{ 
+  border-top: 2pt solid #d0d6b1; padding-top: 0.5em;}
 
 #TOC  ul { list-style-type: none}
-a {text-decoration: none; color:black;}
+a {text-decoration: none; color:#192823;}
 
 p{
   font-family: 'Droid Serif', serif;
   text-align: justify;
+  line-height: 150%;
 }
 
 h1, h2, h3, h4, h5, h6, a{
   font-family: 'Droid Sans', sans-serif;
+  font-weight: normal;
 }
 
 code{
@@ -42,11 +45,10 @@ code{
 }
 
 pre{
-  background-color: #eee;
+  border: 1pt solid #d0d6b1;
   padding: 1em;
   border-radius: 0.5em;
-  white-space: pre-wrap;
-  word-wrap: break-word;
+  overflow-x: auto;
 }
 
 table
@@ -54,8 +56,8 @@ table
     border-collapse: collapse;
     border-spacing: 0; /* IE 6 */
 
-    border-bottom: 2pt solid #000;
-    border-top: 2pt solid #000; /* The caption on top will not have a bottom-border */
+    border-bottom: 2pt solid #d0d6b1;
+    border-top: 2pt solid #d0d6b1; /* The caption on top will not have a bottom-border */
 
     /* Center */
     margin-left: auto;
@@ -64,10 +66,8 @@ table
     
 thead /* Entire table header */
     {
-    border-bottom: 1pt solid #000;
-    background-color: #eee; /* Does this BG print well? */
+    border-bottom: 1pt solid #d0d6b1;
     }
-
 td, th /* Table cells and table header cells */
     { 
     vertical-align: top; /* Word */
@@ -77,6 +77,5 @@ td, th /* Table cells and table header cells */
     padding-top:    0.2em;
     padding-bottom: 0.2em;
     }
-tr.even{
-   background-color: #f0f0f0;
-}
+th{font-weight: normal; padding: 0.4em 0.5em 0.4em 0.5em;}
+
